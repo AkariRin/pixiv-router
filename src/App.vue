@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="blue" dark>
+    <v-app-bar app color="primary" dark>
       <v-app-bar-title>Pixiv导航</v-app-bar-title>
       <v-spacer></v-spacer>
       <v-tooltip bottom>
@@ -43,6 +43,7 @@
               :href="pidLink"
               :target="target"
               :disabled="pidDisable"
+              color="primary"
               block
             >
               <v-icon left>mdi-link-variant</v-icon>
@@ -65,10 +66,30 @@
               :href="illustratorLink"
               :target="target"
               :disabled="illustratorDisable"
+              color="primary"
               block
             >
               <v-icon left>mdi-link-variant</v-icon>
               前往画师主页
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="10" offset="1">
+            <v-text-field v-model="tag" label="tag" clearable></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="10" offset="1">
+            <v-btn
+              :href="tagLink"
+              :target="target"
+              :disabled="tagDisable"
+              color="primary"
+              block
+            >
+              <v-icon left>mdi-tag</v-icon>
+              前往tag页面
             </v-btn>
           </v-col>
         </v-row>
@@ -100,6 +121,7 @@ export default {
   data: () => ({
     pid: "",
     illustratorId: "",
+    tag: "",
     blank: false,
   }),
   computed: {
@@ -109,11 +131,17 @@ export default {
     illustratorLink() {
       return `https://pixiv.net/users/${this.illustratorId}`;
     },
+    tagLink() {
+      return `https://www.pixiv.net/tags/${this.tag}/artworks`;
+    },
     pidDisable() {
       return this.pid === "";
     },
     illustratorDisable() {
       return this.illustratorId === "";
+    },
+    tagDisable() {
+      return this.tag === "";
     },
     target() {
       return this.blank ? "_blank" : "";
