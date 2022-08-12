@@ -39,7 +39,12 @@
         </v-row>
         <v-row>
           <v-col cols="10" offset="1">
-            <v-btn :href="pidLink" :target="target" block>
+            <v-btn
+              :href="pidLink"
+              :target="target"
+              :disabled="pidDisable"
+              block
+            >
               <v-icon left>mdi-link-variant</v-icon>
               前往作品页面
             </v-btn>
@@ -56,7 +61,12 @@
         </v-row>
         <v-row>
           <v-col cols="10" offset="1">
-            <v-btn :href="illustratorLink" :target="target" block>
+            <v-btn
+              :href="illustratorLink"
+              :target="target"
+              :disabled="illustratorDisable"
+              block
+            >
               <v-icon left>mdi-link-variant</v-icon>
               前往画师主页
             </v-btn>
@@ -67,13 +77,20 @@
             <v-expansion-panels>
               <v-expansion-panel>
                 <v-expansion-panel-header>说明</v-expansion-panel-header>
-                <v-expansion-panel-content>content</v-expansion-panel-content>
+                <v-expansion-panel-content>
+                  当你在贴吧冲浪的时候发现有8u发涩图，同时有中国式英雄留下了一串神秘数字。
+                  但是在看到好东西之前还要在浏览器中输入一大串网址，十分的麻烦。
+                  这个小工具可以在填入pid或画师id后直接导航到对应的p站页面
+                </v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
           </v-col>
         </v-row>
       </v-container>
     </v-main>
+    <v-footer>
+      <v-col cols="12" class="text-center"><strong>route2pixiv</strong></v-col>
+    </v-footer>
   </v-app>
 </template>
 
@@ -91,6 +108,12 @@ export default {
     },
     illustratorLink() {
       return `https://pixiv.net/users/${this.illustratorId}`;
+    },
+    pidDisable() {
+      return this.pid === "";
+    },
+    illustratorDisable() {
+      return this.illustratorId === "";
     },
     target() {
       return this.blank ? "_blank" : "";
