@@ -147,5 +147,12 @@ export default {
       return this.blank ? "_blank" : "";
     },
   },
+  mounted() {
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (e) => {
+        this.$vuetify.theme.dark = e.matches;
+      });
+  },
 };
 </script>

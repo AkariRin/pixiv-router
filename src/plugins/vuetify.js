@@ -4,8 +4,6 @@ import colors from "vuetify/lib/util/colors";
 
 Vue.use(Vuetify);
 
-const mq = window.matchMedia("(prefers-color-scheme: dark)");
-
 export default new Vuetify({
   theme: {
     themes: {
@@ -16,10 +14,6 @@ export default new Vuetify({
         primary: colors.blue,
       },
     },
-    dark: mq.matches,
+    dark: window.matchMedia("(prefers-color-scheme: dark)").matches,
   },
-});
-
-mq.addEventListener("change", (e) => {
-  Vuetify.framework.theme.dark = e.matches;
 });
