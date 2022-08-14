@@ -22,23 +22,21 @@
     <v-main>
       <v-container fluid>
         <v-row>
-          <v-col cols="10" offset="1">
+          <v-col cols="12" md="10" offset-md="1">
             <v-switch v-model="blank">
               <template v-slot:label>在新标签页打开</template>
             </v-switch>
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="10" offset="1">
+          <v-col cols="12" md="8" offset-md="1">
             <v-text-field
               v-model="pid"
               label="作品pid"
               clearable
             ></v-text-field>
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="10" offset="1">
+          <v-col cols="12" md="2">
             <v-btn
               :href="pidLink"
               :target="target"
@@ -52,16 +50,14 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="10" offset="1">
+          <v-col cols="12" md="8" offset-md="1">
             <v-text-field
               v-model="illustratorId"
               label="画师id"
               clearable
             ></v-text-field>
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="10" offset="1">
+          <v-col cols="12" md="2">
             <v-btn
               :href="illustratorLink"
               :target="target"
@@ -75,12 +71,10 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="10" offset="1">
+          <v-col cols="12" md="8" offset-md="1">
             <v-text-field v-model="tag" label="tag" clearable></v-text-field>
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="10" offset="1">
+          <v-col cols="12" md="2">
             <v-btn
               :href="tagLink"
               :target="target"
@@ -94,7 +88,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="10" offset="1">
+          <v-col cols="12" md="10" offset-md="1">
             <v-expansion-panels>
               <v-expansion-panel>
                 <v-expansion-panel-header>说明</v-expansion-panel-header>
