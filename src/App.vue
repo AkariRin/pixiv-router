@@ -20,7 +20,7 @@
       </v-tooltip>
     </v-app-bar>
     <v-main>
-      <v-container fluid>
+      <v-container>
         <v-row>
           <v-col cols="12" md="10" offset-md="1">
             <v-switch v-model="blank">
