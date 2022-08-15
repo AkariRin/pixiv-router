@@ -21,7 +21,7 @@
     </v-app-bar>
     <v-main>
       <v-container>
-        <v-row>
+        <v-row dense>
           <v-col cols="12" md="10" offset-md="1">
             <v-switch v-model="blank">
               <template v-slot:label>在新标签页打开</template>
