@@ -48,6 +48,7 @@
               :href="pidLink"
               :target="target"
               :disabled="pidDisable"
+              @click="log('作品pid', pid)"
               color="primary"
               block
             >
@@ -69,10 +70,11 @@
               :href="illustratorLink"
               :target="target"
               :disabled="illustratorDisable"
+              @click="log('画师id', illustratorId)"
               color="primary"
               block
             >
-              <v-icon left>mdi-link-variant</v-icon>
+              <v-icon left>mdi-account</v-icon>
               前往画师主页
             </v-btn>
           </v-col>
@@ -86,6 +88,7 @@
               :href="tagLink"
               :target="target"
               :disabled="tagDisable"
+              @click="log('tag', tag)"
               color="primary"
               block
             >
@@ -108,16 +111,25 @@
             </v-expansion-panels>
           </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="enableHistory">
           <v-col cols="12" md="10" offset-md="1">
             <v-data-table
+              :headers="headers"
+              :items="history"
               no-data-text="暂无历史记录"
+              mobile-breakpoint="0"
               disable-filtering
               disable-sort
               disable-pagination
               hide-default-footer
               class="elevation-1"
-            ></v-data-table>
+            >
+              <template #[`item.type`]="{ item }">
+                <v-chip color="primary" dark>
+                  {{ item.type }}
+                </v-chip>
+              </template>
+            </v-data-table>
           </v-col>
         </v-row>
       </v-container>
@@ -129,6 +141,7 @@
 </template>
 
 <script>
+import _ from "lodash";
 import dataHandler from "@/dataHandler";
 
 export default {
@@ -142,7 +155,7 @@ export default {
     history: dataHandler.readHistory(),
     headers: [
       { text: "类型", value: "type" },
-      { text: "ID/TAG", value: "value" },
+      { text: "id/tag", value: "value" },
       { text: "操作", value: "action" },
     ],
   }),
@@ -170,7 +183,12 @@ export default {
     },
   },
   methods: {
-    log() {},
+    log(type, val) {
+      if (!this.enableHistory) return;
+      if (_.size(this.history) === 10) this.history.pop();
+      let item = { type: type, value: val };
+      this.history.unshift(item);
+    },
     del() {},
     delAll() {
       this.history = [];
