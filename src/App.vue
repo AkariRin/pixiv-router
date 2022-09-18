@@ -28,6 +28,13 @@
             </v-switch>
           </v-col>
         </v-row>
+        <v-row dense>
+          <v-col cols="12" md="10" offset-md="1">
+            <v-switch v-model="enableHistory">
+              <template v-slot:label>历史记录</template>
+            </v-switch>
+          </v-col>
+        </v-row>
         <v-row>
           <v-col cols="12" md="8" offset-md="1">
             <v-text-field
@@ -101,22 +108,43 @@
             </v-expansion-panels>
           </v-col>
         </v-row>
+        <v-row>
+          <v-col cols="12" md="10" offset-md="1">
+            <v-data-table
+              no-data-text="暂无历史记录"
+              disable-filtering
+              disable-sort
+              disable-pagination
+              hide-default-footer
+              class="elevation-1"
+            ></v-data-table>
+          </v-col>
+        </v-row>
       </v-container>
     </v-main>
     <v-footer>
-      <v-col cols="12" class="text-center"><strong>route2pixiv</strong></v-col>
+      <v-col cols="12" class="text-center"><strong>Pixiv Router</strong></v-col>
     </v-footer>
   </v-app>
 </template>
 
 <script>
+import dataHandler from "@/dataHandler";
+
 export default {
   name: "App",
   data: () => ({
     pid: "",
     illustratorId: "",
     tag: "",
-    blank: false,
+    blank: dataHandler.readCfgBlank(),
+    enableHistory: dataHandler.readCfgEnable(),
+    history: dataHandler.readHistory(),
+    headers: [
+      { text: "类型", value: "type" },
+      { text: "ID/TAG", value: "value" },
+      { text: "操作", value: "action" },
+    ],
   }),
   computed: {
     pidLink() {
@@ -141,12 +169,33 @@ export default {
       return this.blank ? "_blank" : "";
     },
   },
-  mounted() {
+  methods: {
+    log() {},
+    del() {},
+    delAll() {
+      this.history = [];
+    },
+  },
+  created() {
     window
       .matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", (e) => {
         this.$vuetify.theme.dark = e.matches;
       });
+  },
+  watch: {
+    blank: function (val) {
+      dataHandler.writeCfgBlank(val);
+    },
+    enableHistory: function (val) {
+      dataHandler.writeCfgEnable(val);
+    },
+    history: {
+      handler(val) {
+        dataHandler.writeHistory(val);
+      },
+      deep: true,
+    },
   },
 };
 </script>
