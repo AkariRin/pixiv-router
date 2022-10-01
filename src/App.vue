@@ -97,20 +97,6 @@
             </v-btn>
           </v-col>
         </v-row>
-        <v-row>
-          <v-col cols="12" md="10" offset-md="1">
-            <v-expansion-panels>
-              <v-expansion-panel>
-                <v-expansion-panel-header>说明</v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  当你在贴吧冲浪的时候发现有8u发涩图，同时有中国式英雄留下了一串神秘数字。
-                  但是在看到好东西之前还要在浏览器中输入一大串网址，十分的麻烦。
-                  这个小工具可以在填入pid或画师id后直接导航到对应的p站页面
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
-          </v-col>
-        </v-row>
         <v-row v-if="enableHistory">
           <v-col cols="12" md="10" offset-md="1">
             <v-data-table
@@ -124,8 +110,40 @@
               hide-default-footer
               class="elevation-1"
             >
+              <template v-slot:top>
+                <v-toolbar flat>
+                  <v-toolbar-title>历史记录</v-toolbar-title>
+                  <v-divider class="mx-4" inset vertical></v-divider>
+                  <v-spacer></v-spacer>
+                  <v-dialog v-model="deleteDialog" max-width="400px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn color="red" dark v-bind="attrs" v-on="on">
+                        清空记录
+                      </v-btn>
+                    </template>
+                    <v-card>
+                      <v-card-title class="text-h5">
+                        你确定要清空历史记录吗？
+                      </v-card-title>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="deleteDialog = false"
+                          >取消</v-btn
+                        >
+                        <v-btn color="red darken-1" text @click="delAll"
+                          >清空</v-btn
+                        >
+                        <v-spacer></v-spacer>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-toolbar>
+              </template>
               <template #[`item.type`]="{ item }">
-                <v-chip color="primary" dark>
+                <v-chip :color="getColor(item.type)" dark>
                   {{ item.type }}
                 </v-chip>
               </template>
@@ -158,6 +176,7 @@ export default {
       { text: "id/tag", value: "value" },
       { text: "操作", value: "action" },
     ],
+    deleteDialog: false,
   }),
   computed: {
     pidLink() {
@@ -192,6 +211,10 @@ export default {
     del() {},
     delAll() {
       this.history = [];
+      this.deleteDialog = false;
+    },
+    getColor(type) {
+      return type === "pid" ? "primary" : type === "画师id" ? "red" : "purple";
     },
   },
   created() {
