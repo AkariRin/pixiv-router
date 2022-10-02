@@ -45,9 +45,9 @@
           </v-col>
           <v-col cols="12" md="2">
             <v-btn
-              :href="pidLink"
+              :href="getLinkByType('pid', pid)"
               :target="target"
-              :disabled="pidDisable"
+              :disabled="pid === ''"
               @click="log('作品pid', pid)"
               color="primary"
               block
@@ -67,9 +67,9 @@
           </v-col>
           <v-col cols="12" md="2">
             <v-btn
-              :href="illustratorLink"
+              :href="getLinkByType('画师id', illustratorId)"
               :target="target"
-              :disabled="illustratorDisable"
+              :disabled="this.illustratorId === ''"
               @click="log('画师id', illustratorId)"
               color="primary"
               block
@@ -85,9 +85,9 @@
           </v-col>
           <v-col cols="12" md="2">
             <v-btn
-              :href="tagLink"
+              :href="getLinkByType('tag', tag)"
               :target="target"
-              :disabled="tagDisable"
+              :disabled="this.tag === ''"
               @click="log('tag', tag)"
               color="primary"
               block
@@ -179,24 +179,6 @@ export default {
     deleteDialog: false,
   }),
   computed: {
-    pidLink() {
-      return `https://pixiv.net/artworks/${this.pid}`;
-    },
-    illustratorLink() {
-      return `https://pixiv.net/users/${this.illustratorId}`;
-    },
-    tagLink() {
-      return `https://www.pixiv.net/tags/${this.tag}/artworks`;
-    },
-    pidDisable() {
-      return this.pid === "";
-    },
-    illustratorDisable() {
-      return this.illustratorId === "";
-    },
-    tagDisable() {
-      return this.tag === "";
-    },
     target() {
       return this.blank ? "_blank" : "";
     },
@@ -207,6 +189,15 @@ export default {
       if (_.size(this.history) === 10) this.history.pop();
       let item = { type: type, value: val };
       this.history.unshift(item);
+    },
+    getLinkByType(type, content) {
+      return type === "pid"
+        ? `https://pixiv.net/artworks/${content}`
+        : type === "画师id"
+        ? `https://pixiv.net/users/${content}`
+        : type === "tag"
+        ? `https://www.pixiv.net/tags/${content}/artworks`
+        : "https://www.pixiv.net/";
     },
     del() {},
     delAll() {
