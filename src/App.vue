@@ -147,6 +147,18 @@
                   {{ item.type }}
                 </v-chip>
               </template>
+              <template #[`item.action`]="{ item }">
+                <v-btn
+                  :href="getLinkByType(item.type, item.value)"
+                  :target="target"
+                  icon
+                >
+                  <v-icon>mdi-open-in-new</v-icon>
+                </v-btn>
+                <v-btn @click="del(item)" icon>
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </template>
             </v-data-table>
           </v-col>
         </v-row>
@@ -199,7 +211,9 @@ export default {
         ? `https://www.pixiv.net/tags/${content}/artworks`
         : "https://www.pixiv.net/";
     },
-    del() {},
+    del(item) {
+      this.history.splice(this.history.indexOf(item), 1);
+    },
     delAll() {
       this.history = [];
       this.deleteDialog = false;
