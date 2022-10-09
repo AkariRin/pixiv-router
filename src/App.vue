@@ -48,7 +48,7 @@
               :href="getLinkByType('pid', pid)"
               :target="target"
               :disabled="pid === ''"
-              @click="log('作品pid', pid)"
+              @click="log('pid', pid)"
               color="primary"
               block
             >
