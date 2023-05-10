@@ -1,5 +1,5 @@
 # Pixiv Router
-[pixiv-router.rbq.ac](https://pixiv-router.rbq.ac)
+[pixiv-router.rbq.dev](https://pixiv-router.rbq.dev)
 
 ## 这是什么？
 当你在贴吧冲浪的时候发现有8u发涩图，同时有中国式英雄留下了一串神秘数字。
