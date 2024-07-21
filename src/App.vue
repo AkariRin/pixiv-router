@@ -8,7 +8,7 @@
           <v-btn
             icon
             dark
-            href="https://github.com/AkariRin/route2pixiv"
+            href="https://github.com/AkariRin/pixiv-router"
             target="_blank"
             v-bind="attrs"
             v-on="on"
