@@ -1,20 +1,16 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
+    <v-app-bar color="primary">
       <v-app-bar-title>Pixiv导航</v-app-bar-title>
       <v-spacer></v-spacer>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
+      <v-tooltip location="bottom">
+        <template #activator="{ props }">
           <v-btn
-            icon
-            dark
+            icon="mdi-github"
             href="https://github.com/AkariRin/pixiv-router"
             target="_blank"
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon>mdi-github</v-icon>
-          </v-btn>
+            v-bind="props"
+          ></v-btn>
         </template>
         <span>在GitHub查看源代码</span>
       </v-tooltip>
@@ -23,16 +19,12 @@
       <v-container>
         <v-row dense>
           <v-col cols="12" md="10" offset-md="1">
-            <v-switch v-model="blank">
-              <template v-slot:label>在新标签页打开</template>
-            </v-switch>
+            <v-switch v-model="blank" label="在新标签页打开"></v-switch>
           </v-col>
         </v-row>
         <v-row dense>
           <v-col cols="12" md="10" offset-md="1">
-            <v-switch v-model="enableHistory">
-              <template v-slot:label>历史记录</template>
-            </v-switch>
+            <v-switch v-model="enableHistory" label="历史记录"></v-switch>
           </v-col>
         </v-row>
         <v-row>
@@ -41,6 +33,7 @@
               v-model="pid"
               label="作品pid"
               clearable
+              variant="underlined"
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="2">
@@ -52,7 +45,7 @@
               color="primary"
               block
             >
-              <v-icon left>mdi-link-variant</v-icon>
+              <v-icon start>mdi-link-variant</v-icon>
               前往作品页面
             </v-btn>
           </v-col>
@@ -62,6 +55,7 @@
             <v-text-field
               v-model="illustratorId"
               label="画师id"
+              variant="underlined"
               clearable
             ></v-text-field>
           </v-col>
@@ -74,14 +68,14 @@
               color="primary"
               block
             >
-              <v-icon left>mdi-account</v-icon>
+              <v-icon start>mdi-account</v-icon>
               前往画师主页
             </v-btn>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" md="8" offset-md="1">
-            <v-text-field v-model="tag" label="tag" clearable></v-text-field>
+            <v-text-field v-model="tag" label="tag" clearable variant="underlined"></v-text-field>
           </v-col>
           <v-col cols="12" md="2">
             <v-btn
@@ -92,7 +86,7 @@
               color="primary"
               block
             >
-              <v-icon left>mdi-tag</v-icon>
+              <v-icon start>mdi-tag</v-icon>
               前往tag页面
             </v-btn>
           </v-col>
@@ -104,20 +98,17 @@
               :items="history"
               no-data-text="暂无历史记录"
               mobile-breakpoint="0"
-              disable-filtering
-              disable-sort
-              disable-pagination
               hide-default-footer
               class="elevation-1"
             >
-              <template v-slot:top>
-                <v-toolbar flat>
+              <template #top>
+                <v-toolbar>
                   <v-toolbar-title>历史记录</v-toolbar-title>
                   <v-divider class="mx-4" inset vertical></v-divider>
                   <v-spacer></v-spacer>
                   <v-dialog v-model="deleteDialog" max-width="400px">
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn color="red" dark v-bind="attrs" v-on="on">
+                    <template #activator="{ props }">
+                      <v-btn color="red" v-bind="props">
                         清空记录
                       </v-btn>
                     </template>
@@ -128,12 +119,11 @@
                       <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn
-                          color="blue darken-1"
-                          text
+                          color="blue-darken-1"
                           @click="deleteDialog = false"
                           >取消</v-btn
                         >
-                        <v-btn color="red darken-1" text @click="delAll"
+                        <v-btn color="red-darken-1" @click="delAll"
                           >清空</v-btn
                         >
                         <v-spacer></v-spacer>
@@ -143,7 +133,7 @@
                 </v-toolbar>
               </template>
               <template #[`item.type`]="{ item }">
-                <v-chip :color="getColor(item.type)" dark>
+                <v-chip :color="getColor(item.type)">
                   {{ item.type }}
                 </v-chip>
               </template>
@@ -151,13 +141,9 @@
                 <v-btn
                   :href="getLinkByType(item.type, item.value)"
                   :target="target"
-                  icon
-                >
-                  <v-icon>mdi-open-in-new</v-icon>
-                </v-btn>
-                <v-btn @click="del(item)" icon>
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
+                  icon="mdi-open-in-new"
+                ></v-btn>
+                <v-btn @click="del(item)" icon="mdi-delete"></v-btn>
               </template>
             </v-data-table>
           </v-col>
@@ -172,7 +158,7 @@
 
 <script>
 import _ from "lodash";
-import dataHandler from "@/dataHandler";
+import { useTheme } from 'vuetify';
 
 export default {
   name: "App",
@@ -180,13 +166,13 @@ export default {
     pid: "",
     illustratorId: "",
     tag: "",
-    blank: dataHandler.readCfgBlank(),
-    enableHistory: dataHandler.readCfgEnable(),
-    history: dataHandler.readHistory(),
+    blank: localStorage.getItem("blank") === null ? false : localStorage.getItem("blank") === "1",
+    enableHistory: localStorage.getItem("enable") === null ? false : localStorage.getItem("enable") === "1",
+    history: localStorage.getItem("history") === null ? [] : JSON.parse(localStorage.getItem("history")),
     headers: [
-      { text: "类型", value: "type" },
-      { text: "id/tag", value: "value" },
-      { text: "操作", value: "action" },
+      { title: "类型", key: "type" },
+      { title: "id/tag", key: "value" },
+      { title: "操作", key: "action" },
     ],
     deleteDialog: false,
   }),
@@ -222,23 +208,31 @@ export default {
       return type === "pid" ? "primary" : type === "画师id" ? "red" : "purple";
     },
   },
-  created() {
+  setup() {
+    const theme = useTheme();
+
+    // 设置初始主题
+    theme.global.name.value = window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light';
+
+    // 监听系统主题变化
     window
       .matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", (e) => {
-        this.$vuetify.theme.dark = e.matches;
+        theme.global.name.value = e.matches ? 'dark' : 'light';
       });
   },
   watch: {
     blank: function (val) {
-      dataHandler.writeCfgBlank(val);
+      let data = val ? "1" : "0";
+      localStorage.setItem("blank", data);
     },
     enableHistory: function (val) {
-      dataHandler.writeCfgEnable(val);
+      let data = val ? "1" : "0";
+      localStorage.setItem("enable", data);
     },
     history: {
       handler(val) {
-        dataHandler.writeHistory(val);
+        localStorage.setItem("history", JSON.stringify(val));
       },
       deep: true,
     },
