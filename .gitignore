@@ -34,3 +34,7 @@ coverage
 
 # Vitest
 __screenshots__/
+
+# Wrangler
+.wrangler/
+.wrangler-dry-run/
